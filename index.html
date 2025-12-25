@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merry Christmas</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', sans-serif;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+/* ===== VIDEO INTRO ===== */
+#intro{
+    position:fixed;
+    inset:0;
+    background:black;
+    z-index:10;
+}
+#video_url{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* ===== BANNER ===== */
+.banner{
+    position:fixed;
+    inset:0;
+    opacity:0;
+    pointer-events:none;
+    background:url("./assets/banner4.jpg") center/cover no-repeat;
+    transform:scale(1.06);
+    transition:opacity .9s ease, transform 1.2s ease;
+}
+.banner.show{
+    opacity:1;
+    pointer-events:auto;
+    transform:scale(1);
+}
+.banner::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.35);
+}
+.banner-content{
+    position:absolute;
+    inset:0;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    color:white;
+    padding:20px;
+}
+.banner h1{
+    font-size:48px;
+    color:#ffdf6c;
+    text-shadow:0 6px 20px rgba(0,0,0,.6);
+}
+
+/* ===== MUSIC ===== */
+.music-controls{
+    display:flex;
+    gap:14px;
+    margin-top:18px;
+}
+.btn{
+    padding:10px 22px;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+    background:rgba(255,255,255,.9);
+}
+
+/* ===== OPEN CARD ===== */
+.open-btn{
+    margin-top:28px;
+    padding:16px 44px;
+    font-size:18px;
+    border:none;
+    border-radius:50px;
+    background:linear-gradient(135deg,#ff4b5c,#ff7b7b);
+    color:white;
+    cursor:pointer;
+    box-shadow:0 10px 30px rgba(255,75,92,.4);
+}
+
+/* ===== CARD ===== */
+.card{
+    position:fixed;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    pointer-events:none;
+    background:url("./assets/banner4.jpg") center/cover no-repeat;
+    transition:opacity .8s ease;
+}
+.card.show{
+    opacity:1;
+    pointer-events:auto;
+}
+.card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.55);
+}
+
+/* ===== CARD BOX (🔥 FIX DỨT ĐIỂM) ===== */
+.card-box{
+    position:relative;
+    z-index:2;
+    width:560px;
+    max-width:92%;
+
+    /* 🔥 QUAN TRỌNG */
+    max-height:80vh;
+    overflow-y:auto;
+
+    padding:38px 42px;
+    border-radius:22px;
+    text-align:center;
+    color:white;
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(8px);
+    box-shadow:
+        0 0 40px rgba(255,255,255,.2),
+        inset 0 0 20px rgba(255,255,255,.08);
+}
+
+/* TEXT */
+.card-box h2,
+.card-box p{
+    white-space:pre-wrap;
+    word-break:break-word;
+}
+
+.card-box h2{
+    font-size:36px;
+    color:#ffd966;
+}
+.card-box p{
+    font-size:18px;
+    margin:8px 0;
+}
+.highlight{
+    color:#ffeb3b;
+    font-weight:600;
+}
+
+.back-btn{
+    margin-top:22px;
+    padding:10px 28px;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+}
+
+/* ===== SNOW ===== */
+.snow{
+    position:fixed;
+    top:-10px;
+    color:white;
+    pointer-events:none;
+    animation:fall linear infinite;
+    z-index:3;
+}
+@keyframes fall{
+    to{transform:translateY(110vh);}
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:480px){
+    .banner h1{font-size:30px;}
+
+    .card-box{
+        max-height:75vh;
+        padding:22px 18px;
+    }
+    .card-box h2{
+        font-size:24px;
+        line-height:1.4;
+    }
+    .card-box p{
+        font-size:16px;
+        line-height:1.6;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="intro">
+    <video id="video_url" autoplay muted playsinline>
+        <source src="./assets/1.mp4" type="video/mp4">
+    </video>
+</div>
+
+<div class="banner" id="banner">
+    <div class="banner-content">
+        <h1>🎄 Chúc Thuong Do Giáng Sinh An Lành 🎄</h1>
+
+        <div class="music-controls">
+            <button class="btn" onclick="playMusic()">🔊 Bật nhạc giáng sinh</button>
+            <button class="btn" onclick="pauseMusic()">🔇 Tắt nhạc giáng sinh </button>
+        </div>
+
+        <button class="open-btn" onclick="openCard()">🎁 Mở Thiệp</button>
+    </div>
+</div>
+
+<div class="card" id="card">
+    <div class="card-box">
+        <h2 id="t1"></h2>
+        <p id="t2"></p>
+        <p id="t3" class="highlight"></p>
+        <p id="t4"></p>
+        <button class="back-btn" onclick="backBanner()">⬅ Quay lại</button>
+    </div>
+</div>
+
+<audio id="bgMusic" loop>
+    <source src="./assets/nhac.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const video=document.getElementById("video_url");
+const intro=document.getElementById("intro");
+const banner=document.getElementById("banner");
+const card=document.getElementById("card");
+const music=document.getElementById("bgMusic");
+
+/* INTRO */
+video.addEventListener("ended",()=>{
+    intro.style.display="none";
+    banner.classList.add("show");
+    createSnow();
+    autoMusic();
+});
+
+/* MUSIC */
+function playMusic(){
+    music.play().catch(()=>{});
+    localStorage.setItem("music","on");
+}
+function pauseMusic(){
+    music.pause();
+    localStorage.setItem("music","off");
+}
+function autoMusic(){
+    if(localStorage.getItem("music")==="on"){
+        music.play().catch(()=>{
+            document.addEventListener("click",()=>music.play(),{once:true});
+        });
+    }
+}
+
+/* TYPE EFFECT */
+const TYPE_SPEED = 60;
+const texts=[
+    "🎅 Merry Christmas 🎅",
+    "Chúc em một mùa Noel",
+    "✨ Ấm áp – Hạnh phúc – Bình an ✨",
+    "chúc Thuong một mùa Giáng Sinh an lành và mọi điều tốt đẹp đều đến với em!"
+];
+const els=[
+    t1,t2,t3,t4
+];
+
+function typeText(text, el, cb){
+    let i=0;
+    el.textContent="";
+    (function typing(){
+        if(i<text.length){
+            el.textContent+=text[i++];
+            setTimeout(typing,TYPE_SPEED);
+        }else if(cb){ setTimeout(cb,400); }
+    })();
+}
+
+function startTyping(){
+    els.forEach(e=>e.textContent="");
+    typeText(texts[0],els[0],()=>{
+        typeText(texts[1],els[1],()=>{
+            typeText(texts[2],els[2],()=>{
+                typeText(texts[3],els[3]);
+            });
+        });
+    });
+}
+
+/* OPEN / BACK */
+function openCard(){
+    card.classList.add("show");
+    banner.classList.remove("show");
+    startTyping();
+}
+function backBanner(){
+    banner.classList.add("show");
+    card.classList.remove("show");
+}
+
+/* SNOW */
+function createSnow(){
+    for(let i=0;i<80;i++){
+        const s=document.createElement("div");
+        s.innerHTML="❄";
+        s.className="snow";
+        s.style.left=Math.random()*100+"vw";
+        s.style.animationDuration=(5+Math.random()*6)+"s";
+        s.style.fontSize=(10+Math.random()*18)+"px";
+        s.style.opacity=Math.random();
+        document.body.appendChild(s);
+    }
+}
+</script>
+
+</body>
+</html>
